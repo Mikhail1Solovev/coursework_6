@@ -1,0 +1,15 @@
+{% load static %}
+{% extends "base.html" %}
+
+{% block title %}Детали клиента{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Детали клиента</h2>
+    <p>Имя: {{ client.name }}</p>
+    <p>Email: {{ client.email }}</p>
+    <p>Комментарий: {{ client.comment }}</p>
+    <a href="{% url 'client_edit' client.pk %}" class="btn btn-warning">Редактировать</a>
+    <a href="{% url 'client_delete' client.pk %}" class="btn btn-danger">Удалить</a>
+</div>
+{% endblock %}

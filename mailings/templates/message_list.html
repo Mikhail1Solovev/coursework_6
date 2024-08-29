@@ -1,0 +1,18 @@
+{% load static %}
+{% extends "base.html" %}
+
+{% block title %}Список сообщений{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Сообщения</h2>
+    <a href="{% url 'message_create' %}" class="btn btn-success">Создать сообщение</a>
+    <ul class="list-group">
+        {% for message in messages %}
+        <li class="list-group-item">
+            <a href="{% url 'message_detail' message.pk %}">{{ message.subject }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

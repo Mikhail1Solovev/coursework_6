@@ -1,0 +1,14 @@
+{% load static %}
+{% extends "base.html" %}
+
+{% block title %}Детали сообщения{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Детали сообщения</h2>
+    <p>Тема: {{ message.subject }}</p>
+    <p>Сообщение: {{ message.body }}</p>
+    <a href="{% url 'message_edit' message.pk %}" class="btn btn-warning">Редактировать</a>
+    <a href="{% url 'message_delete' message.pk %}" class="btn btn-danger">Удалить</a>
+</div>
+{% endblock %}
