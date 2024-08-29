@@ -1,31 +1,30 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block title %}Создать рассылку{% endblock %}
 
 {% block content %}
 <div class="container">
-    <h2>Создать новую рассылку</h2>
+    <h2>Создать рассылку</h2>
     <form method="post">
         {% csrf_token %}
         <div class="form-group">
-            <label for="{{ form.start_datetime.id_for_label }}">Дата и время начала:</label>
+            <label for="id_start_datetime">Дата и время начала:</label>
             {{ form.start_datetime }}
         </div>
         <div class="form-group">
-            <label for="{{ form.periodicity.id_for_label }}">Периодичность:</label>
+            <label for="id_periodicity">Периодичность:</label>
             {{ form.periodicity }}
         </div>
         <div class="form-group">
-            <label for="{{ form.status.id_for_label }}">Статус:</label>
+            <label for="id_status">Статус:</label>
             {{ form.status }}
         </div>
         <div class="form-group">
-            <label for="{{ form.message.id_for_label }}">Сообщение:</label>
+            <label for="id_message">Сообщение:</label>
             {{ form.message }}
         </div>
         <div class="form-group">
-            <label for="{{ form.clients.id_for_label }}">Клиенты:</label>
+            <label for="id_clients">Клиенты:</label>
             {{ form.clients }}
         </div>
         <button type="submit" class="btn btn-primary">Создать</button>
