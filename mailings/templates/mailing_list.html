@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Mailing List</h1>
+  <a href="{% url 'mailing_create' %}">Create New Mailing</a>
+  <ul>
+    {% for mailing in object_list %}
+      <li>
+        <a href="{% url 'mailing_detail' mailing.pk %}">{{ mailing }}</a>
+        <a href="{% url 'mailing_update' mailing.pk %}">Edit</a>
+        <a href="{% url 'mailing_delete' mailing.pk %}">Delete</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
