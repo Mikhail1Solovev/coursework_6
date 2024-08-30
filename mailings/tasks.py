@@ -3,5 +3,5 @@ from .services import process_mailings
 
 def start():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(process_mailings, 'interval', seconds=10)
+    scheduler.add_job(process_mailings, 'interval', minutes=1)
     scheduler.start()

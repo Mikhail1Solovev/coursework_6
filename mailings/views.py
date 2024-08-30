@@ -1,81 +1,74 @@
-from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from .models import Mailing, Message, Client
-from .forms import MailingForm
+from .forms import MailingForm, MessageForm, ClientForm
 
-class MailingListView(ListView):
+class MailingListView(LoginRequiredMixin, ListView):
     model = Mailing
     template_name = 'mailing_list.html'
+    context_object_name = 'mailings'
 
-class MailingDetailView(DetailView):
-    model = Mailing
-    template_name = 'mailing_detail.html'
+    def get_queryset(self):
+        return Mailing.objects.filter(owner=self.request.user)
 
-class MailingCreateView(CreateView):
+
+class MailingCreateView(LoginRequiredMixin, CreateView):
     model = Mailing
     form_class = MailingForm
     template_name = 'mailing_create.html'
-    success_url = reverse_lazy('mailing_list')
+    success_url = '/mailings/'
 
-class MailingUpdateView(UpdateView):
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
+
+class MailingUpdateView(LoginRequiredMixin, UpdateView):
     model = Mailing
     form_class = MailingForm
     template_name = 'mailing_edit.html'
-    success_url = reverse_lazy('mailing_list')
+    success_url = '/mailings/'
 
-class MailingDeleteView(DeleteView):
+    def get_queryset(self):
+        return Mailing.objects.filter(owner=self.request.user)
+
+
+class MailingDeleteView(LoginRequiredMixin, DeleteView):
     model = Mailing
     template_name = 'mailing_delete.html'
-    success_url = reverse_lazy('mailing_list')
+    success_url = '/mailings/'
 
-# Сообщения
-class MessageListView(ListView):
-    model = Message
-    template_name = 'message_list.html'
+    def get_queryset(self):
+        return Mailing.objects.filter(owner=self.request.user)
 
-class MessageDetailView(DetailView):
-    model = Message
-    template_name = 'message_detail.html'
 
-class MessageCreateView(CreateView):
+class MailingDetailView(LoginRequiredMixin, DetailView):
+    model = Mailing
+    template_name = 'mailing_detail.html'
+
+    def get_queryset(self):
+        return Mailing.objects.filter(owner=self.request.user)
+
+
+class MessageCreateView(LoginRequiredMixin, CreateView):
     model = Message
-    fields = ['subject', 'body']
+    form_class = MessageForm
     template_name = 'message_create.html'
-    success_url = reverse_lazy('message_list')
+    success_url = '/messages/'
 
-class MessageUpdateView(UpdateView):
-    model = Message
-    fields = ['subject', 'body']
-    template_name = 'message_edit.html'
-    success_url = reverse_lazy('message_list')
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
-class MessageDeleteView(DeleteView):
-    model = Message
-    template_name = 'message_delete.html'
-    success_url = reverse_lazy('message_list')
 
-# Клиенты
-class ClientListView(ListView):
+class ClientCreateView(LoginRequiredMixin, CreateView):
     model = Client
-    template_name = 'client_list.html'
-
-class ClientDetailView(DetailView):
-    model = Client
-    template_name = 'client_detail.html'
-
-class ClientCreateView(CreateView):
-    model = Client
-    fields = ['email', 'full_name', 'comment']
+    form_class = ClientForm
     template_name = 'client_create.html'
-    success_url = reverse_lazy('client_list')
+    success_url = '/clients/'
 
-class ClientUpdateView(UpdateView):
-    model = Client
-    fields = ['email', 'full_name', 'comment']
-    template_name = 'client_edit.html'
-    success_url = reverse_lazy('client_list')
-
-class ClientDeleteView(DeleteView):
-    model = Client
-    template_name = 'client_delete.html'
-    success_url = reverse_lazy('client_list')
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
