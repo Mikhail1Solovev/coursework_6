@@ -1,13 +1,13 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.decorators.cache import cache_page
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from .models import Mailing, Message, Client, Blog, MailingAttempt
 from .forms import MailingForm, MessageForm, ClientForm
 
-
 # Представления для главной страницы
 
+@cache_page(60 * 15)  # Кэширование страницы на 15 минут
 def home(request):
     total_mailings = Mailing.objects.count()
     active_mailings = Mailing.objects.filter(status='running').count()
@@ -21,7 +21,6 @@ def home(request):
         'recent_blogs': recent_blogs,
     }
     return render(request, 'home.html', context)
-
 
 # Представления для рассылок
 
@@ -73,6 +72,8 @@ class MailingDetailView(LoginRequiredMixin, DetailView):
         return Mailing.objects.filter(owner=self.request.user)
 
 
+# Представления для клиентов
+
 class ClientListView(LoginRequiredMixin, ListView):
     model = Client
     template_name = 'client_list.html'
@@ -121,6 +122,8 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
         return Client.objects.filter(owner=self.request.user)
 
 
+# Представления для сообщений
+
 class MessageListView(LoginRequiredMixin, ListView):
     model = Message
     template_name = 'message_list.html'
@@ -168,6 +171,8 @@ class MessageDetailView(LoginRequiredMixin, DetailView):
     def get_queryset(self):
         return Message.objects.filter(owner=self.request.user)
 
+
+# Представление для отчета по рассылкам
 
 def mailing_report(request):
     attempts = MailingAttempt.objects.all()
