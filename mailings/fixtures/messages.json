@@ -1,0 +1,20 @@
+[
+  {
+    "model": "mailings.message",
+    "pk": 1,
+    "fields": {
+      "subject": "Добро пожаловать",
+      "body": "Добро пожаловать в наш сервис!",
+      "owner": 1
+    }
+  },
+  {
+    "model": "mailings.message",
+    "pk": 2,
+    "fields": {
+      "subject": "Скидка 20%",
+      "body": "Получите скидку 20% на следующую покупку.",
+      "owner": 1
+    }
+  }
+]

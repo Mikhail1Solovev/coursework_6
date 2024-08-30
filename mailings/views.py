@@ -1,9 +1,27 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
-from .models import Mailing, Message, Client, Blog
+from .models import Mailing, Message, Client, Blog, MailingAttempt
 from .forms import MailingForm, MessageForm, ClientForm
+
+
+# Представления для главной страницы
+
+def home(request):
+    total_mailings = Mailing.objects.count()
+    active_mailings = Mailing.objects.filter(status='running').count()
+    unique_clients = Client.objects.distinct('email').count()
+    recent_blogs = Blog.objects.order_by('-published_at')[:3]
+
+    context = {
+        'total_mailings': total_mailings,
+        'active_mailings': active_mailings,
+        'unique_clients': unique_clients,
+        'recent_blogs': recent_blogs,
+    }
+    return render(request, 'home.html', context)
+
 
 # Представления для рассылок
 
@@ -54,7 +72,6 @@ class MailingDetailView(LoginRequiredMixin, DetailView):
     def get_queryset(self):
         return Mailing.objects.filter(owner=self.request.user)
 
-# Представления для клиентов
 
 class ClientListView(LoginRequiredMixin, ListView):
     model = Client
@@ -95,7 +112,14 @@ class ClientDeleteView(LoginRequiredMixin, DeleteView):
         return Client.objects.filter(owner=self.request.user)
 
 
-# Представления для сообщений
+class ClientDetailView(LoginRequiredMixin, DetailView):
+    model = Client
+    template_name = 'client_detail.html'
+    context_object_name = 'client'
+
+    def get_queryset(self):
+        return Client.objects.filter(owner=self.request.user)
+
 
 class MessageListView(LoginRequiredMixin, ListView):
     model = Message
@@ -135,21 +159,16 @@ class MessageDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         return Message.objects.filter(owner=self.request.user)
 
-# Представления для блога
 
-class BlogListView(ListView):
-    model = Blog
-    template_name = 'blog_list.html'
-    context_object_name = 'blogs'
+class MessageDetailView(LoginRequiredMixin, DetailView):
+    model = Message
+    template_name = 'message_detail.html'
+    context_object_name = 'message'
+
+    def get_queryset(self):
+        return Message.objects.filter(owner=self.request.user)
 
 
-class BlogDetailView(DetailView):
-    model = Blog
-    template_name = 'blog_detail.html'
-    context_object_name = 'blog'
-
-    def get_object(self):
-        blog = super().get_object()
-        blog.views += 1
-        blog.save()
-        return blog
+def mailing_report(request):
+    attempts = MailingAttempt.objects.all()
+    return render(request, 'mailing_report.html', {'attempts': attempts})

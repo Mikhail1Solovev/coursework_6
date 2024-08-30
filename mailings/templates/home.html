@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Добро пожаловать в Сервис Рассылок!</h1>
+    <p class="lead">Управляйте рассылками и следите за их эффективностью с помощью нашего сервиса.</p>
+    <hr class="my-4">
+    <p>Всего рассылок: <strong>{{ total_mailings }}</strong></p>
+    <p>Активных рассылок: <strong>{{ active_mailings }}</strong></p>
+    <p>Уникальных клиентов: <strong>{{ unique_clients }}</strong></p>
+    <a class="btn btn-primary btn-lg" href="{% url 'mailing_list' %}" role="button">Перейти к рассылкам</a>
+</div>
+
+<h2>Последние статьи блога</h2>
+<div class="row">
+    {% for blog in recent_blogs %}
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ blog.title }}</h5>
+                <p class="card-text">{{ blog.content|truncatewords:30 }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

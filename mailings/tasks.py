@@ -29,7 +29,7 @@ def process_mailings():
                     recipient_list=[client.email],
                     fail_silently=False,
                 )
-                # Логирование успешной попытки
+
                 MailingAttempt.objects.create(
                     mailing=mailing,
                     timestamp=current_time,
@@ -44,7 +44,7 @@ def process_mailings():
                     status='failed',
                     response=str(e)
                 )
-        # Обновление статуса рассылки после обработки всех клиентов
+
         mailing.status = 'completed'
         mailing.save()
 

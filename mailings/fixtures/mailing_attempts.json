@@ -1,0 +1,22 @@
+[
+  {
+    "model": "mailings.mailingattempt",
+    "pk": 1,
+    "fields": {
+      "mailing": 1,
+      "timestamp": "2024-09-01T10:00:00Z",
+      "status": "успех",
+      "response": "250 OK"
+    }
+  },
+  {
+    "model": "mailings.mailingattempt",
+    "pk": 2,
+    "fields": {
+      "mailing": 2,
+      "timestamp": "2024-09-05T12:00:00Z",
+      "status": "ошибка",
+      "response": "550 Такого пользователя нет"
+    }
+  }
+]

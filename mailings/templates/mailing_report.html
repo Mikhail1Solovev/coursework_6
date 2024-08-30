@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Mailing Report</h2>
+  <table>
+    <tr>
+      <th>Mailing ID</th>
+      <th>Status</th>
+      <th>Timestamp</th>
+      <th>Response</th>
+    </tr>
+    {% for attempt in attempts %}
+    <tr>
+      <td>{{ attempt.mailing.id }}</td>
+      <td>{{ attempt.status }}</td>
+      <td>{{ attempt.timestamp }}</td>
+      <td>{{ attempt.response }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
