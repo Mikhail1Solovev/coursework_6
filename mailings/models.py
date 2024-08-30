@@ -48,7 +48,19 @@ class MailingAttempt(models.Model):
     mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, related_name='attempts')
     timestamp = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=50)
-    response = models.TextField(blank=True, null=True)
+    response = models.TextField()
 
     def __str__(self):
-        return f"Попытка {self.mailing.id} - {self.status}"
+        return f"Попытка рассылки {self.mailing.id} - {self.status}"
+
+
+# Добавленный код для блога:
+class Blog(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    image = models.ImageField(upload_to='blog_images/', blank=True, null=True)
+    views = models.PositiveIntegerField(default=0)
+    published_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
